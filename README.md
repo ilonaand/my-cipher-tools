@@ -17,7 +17,7 @@ CLI tool should accept 3 options (short alias and full name):
 For example, config "C1-C1-R0-A" means "encode by Caesar cipher => encode by Caesar cipher => decode by ROT-8 => use Atbash"
 Usage:
 
-    Clone this branch
+    Clone this branch https://github.com/ilonaand/my-cipher-tools.git
 
     git clone 
     Check your Node Version
