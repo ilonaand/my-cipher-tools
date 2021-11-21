@@ -19,7 +19,8 @@ Usage:
 
     Clone this branch https://github.com/ilonaand/my-cipher-tools.git
 
-    git clone 
+    git clone https://github.com/ilonaand/my-cipher-tools.git
+
     Check your Node Version
 
     App uses streams, so for using it you need Node version 16+. Make sure that you using correct one (f.e via nvm)
