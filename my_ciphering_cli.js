@@ -1,9 +1,9 @@
-import { unFlat, validateConfig } from './validate.js';
+import { unFlat, validateConfig } from './src/validate.js';
 import  process, { stdin, stdout } from 'process';
 import { pipeline } from  'stream';
-import { myTransform } from './transformStream.js';
-import { myReadStream } from './readableStream.js';
-import { myWriteStream } from './writableStream.js';
+import { myTransform } from './src/transformStream.js';
+import { myReadStream } from './src/readableStream.js';
+import { myWriteStream } from './src/writableStream.js';
 import path from 'path';
 const __dirname = path.resolve();
 
