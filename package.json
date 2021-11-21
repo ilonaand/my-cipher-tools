@@ -5,5 +5,28 @@
   "version": "1.0.0",
   "main": "./my_ciphering_cli.js",
   "type": "module",
+  "scripts": {
+    "test": "jest",
+    "test:coverage": "jest --coverage"
+  },
+  "devDependencies": {
+    "@babel/plugin-transform-modules-commonjs": "^7.16.0",
+    "jest": "^27.3.1"
+  },
+  "jest": {
+    "verbose": true,
+    "collectCoverageFrom": [
+      "src/**/*.js"
+    ]
+  },
+  "babel": {
+    "env": {
+      "test": {
+        "plugins": [
+          "@babel/plugin-transform-modules-commonjs"
+        ]
+      }
+    }
+  },
   "dependencies": {}
 }
