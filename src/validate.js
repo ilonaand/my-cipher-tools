@@ -1,29 +1,43 @@
-const { exit } = process;
+const flagArray = process.argv.slice(2);
+
+const allowFlags = [['-c', '--config'], ['-i', '--input'], ['-o', '--output' ]];
 
 /* check flag -c --config */
 const checkC = (flagArray) => {
-  if ((flagArray.length === 0) || flagArray.filter(x => (x ===  '-c' || x === '--config')).length === 0) 
+  if (!flagArray.includes('-c') && !flagArray.includes('--config'))
     return 'Добавьте как минимум флаг -c ';
   return 0;
 }
 
+
 /* check repeat flags  */
-function checkRepeat(flagArray, options) {
-  if (flagArray.filter(x => (x === options[0] || x === options[1])).length > 1)
-    return `флаги ${options} повторяются `;
+function checkRepeat(flagArray, allowFlags) {
+  for  (let i = 0; i < 3; i++) {
+    if (flagArray.filter(x => (x === allowFlags[i][0] || x === allowFlags[i][1])).length > 1)
+      return `флаги  ${allowFlags[i]} повторяются `;
+  }
   return 0;
 }
 
+
+// console.log(checkC(flagArray)); 
+// console.log(checkRepeat(flagArray, allowFlags));
+
 const transaformToArray = (flagArray, options) => {
-  const i = flagArray.indexOf(options[0]) >= 0 
-    ? flagArray.indexOf(options[0]) 
-    : flagArray.indexOf(options[1]) >= 0 
-    ? flagArray.indexOf(options[1])
-    : -1;
+  let i = flagArray.indexOf(options[0]);
+  if (i < 0) {
+    i = flagArray.indexOf(options[1]);  
+  }
+  // const i = flagArray.indexOf(options[0]) >= 0 
+  //   ? flagArray.indexOf(options[0]) 
+  //   : flagArray.indexOf(options[1]) >= 0 
+  //   ? flagArray.indexOf(options[1])
+  //   : -1;
   if (i < 0) return 0;
-  let arr = flagArray.slice(i, i + 2);
-  let begin = (arr[0].slice(1, 2) === '-') ? 2 : 1;
-  return {[arr[0].slice(begin, begin + 1)]: arr[1]};
+  const arr = flagArray.slice(i, i + 2); 
+  return { [arr[0].replaceAll('-', '')[0]] : arr[1]}
+  // let begin = (arr[0].slice(1, 2) === '-') ? 2 : 1;
+  // return {[arr[0].slice(begin, begin + 1)]: arr[1]};
 }
 
 const unFlat = (flagArray, allowFlags) => {
@@ -32,16 +46,15 @@ const unFlat = (flagArray, allowFlags) => {
     console.error(err);
     exit(1);
   }
-  for (let i = 0; i < 3; i++) {
-    const err = checkRepeat(flagArray, allowFlags.slice((i*2), (i*2) + 2));
-    if (err !== 0) {
-      console.error(err);
-      exit(1);
-    }
+ 
+  err = checkRepeat(flagArray, allowFlags);
+  if (err !== 0) {
+    console.error(err);
+    exit(1);
   }
   let obj = {};
   for (let i = 0; i < 3; i++) {
-    let item = transaformToArray(flagArray, allowFlags.slice((i*2), (i*2) + 2));
+    let item = transaformToArray(flagArray, allowFlags[i]);
     if (item !== 0) {
       obj = Object.assign(obj, item);
     }
@@ -49,10 +62,12 @@ const unFlat = (flagArray, allowFlags) => {
   return obj;
 }
 
+//"C1-C1-R0-A"
+const allowConfig = [ 'C0', 'C1', 'R0', 'R1', 'A'];
 const validateConfig = (config, allowConfig) => {
   const arr = config.split('-');
   for (let i = 0; i < arr.length; i++) {
-    if (allowConfig.indexOf(arr[i]) < 0) {
+    if (!allowConfig.includes(arr[i])) {
       console.error('config is not valid');
       exit(1);
     }
@@ -60,4 +75,6 @@ const validateConfig = (config, allowConfig) => {
   return arr;
 }
 
-export { validateConfig, unFlat };
+//console.log(validateConfig ('C1-C1-R0-A-', allowConfig));
+
+export { unFlat,  validateConfig }
